@@ -1,0 +1,8 @@
+[Unit]
+After=tailscale-up.service
+Wants=network-online.target
+Description=Serves Cockpit over Tailnet
+[Service]
+ExecStart=tailscale serve 9090
+[Install]
+WantedBy=multi-user.target

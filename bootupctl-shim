@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ $# -ge 2 ]]; then
+    if [[ "$1" == "backend" && "$2" == "install" ]]; then
+        # BASH_ARGV[0] is the last argument. In the case of bootupctl backend install, it's the path to the target
+        # root directory.
+        echo "Copying Raspberry Pi firmware files to ${BASH_ARGV[0]}/boot/efi/" >&2
+        cp -av /usr/lib/bootc-raspi-firmwares/. "${BASH_ARGV[0]}"/boot/efi/
+        echo "Copying Raspberry Pi firmware files finished" >&2
+    fi
+fi
+
+exec /usr/bin/bootupctl-orig/bootupctl "$@"
+
+podman run --rm --name networking-pi-bootc-image-builder --tty --privileged --security-opt label=type:unconfined_t -v D:\Projects\Networking-Pi\DiskImage:/output/ -v /var/lib/containers/storage:/var/lib/containers/storage --label bootc.image.builder=true quay.io/centos-bootc/bootc-image-builder:sha256-de948b4d66006b26e2cb6a051afdb3cfcd569c9db52bb6fe7b1f2236ad216207 l3tum/networking-pi:latest --output /output/ --local --progress verbose --type raw --target-arch arm64 --rootfs ext4

@@ -1,0 +1,10 @@
+[Unit]
+Description=Optimize Network Interface for Tailscale
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/network-opt.sh
+RemainAfterExit=true
+[Install]
+WantedBy=multi-user.target

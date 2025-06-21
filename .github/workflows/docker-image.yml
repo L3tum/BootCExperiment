@@ -16,7 +16,7 @@ jobs:
       run: docker build . --file Dockerfile --tag l3tum/bootcexperiment --build-arg TS_AUTHOR_KEY=${TS_AUTHOR_KEY} --platform linux/arm64
     - name: Build RAW
       id: build-raw
-      uses: osbuild/bootc-image-builder-action@vX.Y.Z
+      uses: osbuild/bootc-image-builder-action@v0.0.2
       with:
         image: l3tum/bootcexperiment
         types: |

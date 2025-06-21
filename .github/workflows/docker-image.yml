@@ -13,12 +13,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag l3tum/bootcexperiment --build-arg TS_AUTHOR_KEY=${TS_AUTHOR_KEY} --platform linux/arm64
+      run: docker build . --file Dockerfile --tag l3tum/bootcexperiment:latest --build-arg TS_AUTHOR_KEY=${TS_AUTHOR_KEY} --platform linux/arm64
     - name: Build RAW
       id: build-raw
       uses: osbuild/bootc-image-builder-action@v0.0.2
       with:
-        image: docker.io/l3tum/bootcexperiment
+        image: docker-daemon:l3tum/bootcexperiment:latest
         types: |
           raw
         rootfs: xfs

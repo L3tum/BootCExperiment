@@ -18,7 +18,7 @@ jobs:
       id: build-raw
       uses: osbuild/bootc-image-builder-action@v0.0.2
       with:
-        image: l3tum/bootcexperiment
+        image: docker.io/l3tum/bootcexperiment
         types: |
           raw
         rootfs: xfs

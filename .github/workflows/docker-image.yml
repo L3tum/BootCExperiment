@@ -1,0 +1,30 @@
+name: BootC CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag l3tum/bootcexperiment --build-arg TS_AUTHOR_KEY=${TS_AUTHOR_KEY} --platform linux/arm64
+    - name: Build RAW
+      id: build-raw
+      uses: osbuild/bootc-image-builder-action@vX.Y.Z
+      with:
+        image: l3tum/bootcexperiment
+        types: |
+          raw
+        rootfs: xfs
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: raw
+        path: ${{ steps.build-raw.outputs.output-directory }}
+        if-no-files-found: error

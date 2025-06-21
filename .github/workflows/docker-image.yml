@@ -15,9 +15,9 @@ jobs:
     - uses: docker/login-action@v3.4.0
       with:
         username: l3tum
-        password: ${DOCKER_PAT}
+        password: ${{secrets.DOCKER_PAT}}
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag l3tum/bootcexperiment:latest --build-arg TS_AUTHOR_KEY=${TS_AUTHOR_KEY} --platform linux/arm64 && docker push l3tum/bootcexperiment
+      run: docker build . --file Dockerfile --tag l3tum/bootcexperiment:latest --build-arg TS_AUTHOR_KEY=${{secrets.TS_AUTHOR_KEY}} --platform linux/arm64 && docker push l3tum/bootcexperiment
     - name: Build RAW
       id: build-raw
       uses: osbuild/bootc-image-builder-action@v0.0.2

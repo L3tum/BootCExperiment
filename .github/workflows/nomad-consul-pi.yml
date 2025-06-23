@@ -23,12 +23,30 @@ jobs:
         types: |
           raw
         rootfs: xfs
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+    - name: Checkout artifact repo
+      uses: actions/checkout@v4
       with:
-        name: raw
-        path: ${{ steps.build-raw.outputs.output-directory }}
-        if-no-files-found: error
+        token: ${{ secrets.ARTIFACTREPOTOKEN }}
+        repository: l3tum/artifact-repo
+        ref: master
+        path: artifactrepo
+    - name: Move Artifact to artifact repo
+      run: |
+        mkdir -p artifactrepo/nomad-consul-pi
+        cp ${{ steps.build-raw.outputs.output-directory }}/* artifactrepo/nomad-consul-pi/
+    - name: Commit files
+      run: |
+        cd artifactrepo
+        git config --local user.email "BootC@test.com"
+        git config --local user.name "BootC"
+        git commit -a -m "Upload new nomad-consul-pi"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.ARTIFACTREPOTOKEN }}
+        repository: l3tum/artifact-repo
+        force: true
+        directory: artifactrepo
     - name: Delete config.toml
       if: always()
       run: rm -rf ./config.toml

@@ -7,6 +7,12 @@ jobs:
   build:
     runs-on: ubuntu-24.04-arm
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 512
+        swap-size-mb: 1024
+        remove-dotnet: 'true'
     - uses: actions/checkout@v4
     - name: Pull the config.toml
       run: curl https://raw.githubusercontent.com/L3tum/NomadConsulPi/refs/heads/master/config.toml --output ./config.toml

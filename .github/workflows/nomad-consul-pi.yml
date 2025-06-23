@@ -12,8 +12,8 @@ jobs:
       run: curl https://raw.githubusercontent.com/L3tum/NomadConsulPi/refs/heads/master/config.toml --output ./config.toml
     - name: Replace values in config.toml with secrets
       run: |
-        sed -i "s/TAILSCALE_SECRET/${{ secrets.TS_AUTHOR_KEY }}/d" ./config.toml
-        sed -i "s/CONSUL_GOSSIP_KEY/${{ secrets.CONSUL_GOSSIP_KEY }}/d" ./config.toml
+        sed -i "s/TAILSCALE_SECRET/${{ secrets.TS_AUTHOR_KEY }}/g" ./config.toml
+        sed -i "s/CONSUL_GOSSIP_KEY/${{ secrets.CONSUL_GOSSIP_KEY }}/g" ./config.toml
     - name: Build RAW
       id: build-raw
       uses: osbuild/bootc-image-builder-action@v0.0.2

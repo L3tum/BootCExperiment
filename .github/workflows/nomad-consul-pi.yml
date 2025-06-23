@@ -1,0 +1,34 @@
+name: Nomad Consul Pi Raw Builder
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - uses: actions/checkout@v4
+    - name: Pull the config.toml
+      run: curl https://raw.githubusercontent.com/L3tum/NomadConsulPi/refs/heads/master/config.toml --output ./config.toml
+    - name: Replace values in config.toml with secrets
+      run: |
+        sed -i "s/TAILSCALE_SECRET/${{ secrets.TS_AUTHOR_KEY }}/d" ./config.toml
+        sed -i "s/CONSUL_GOSSIP_KEY/${{ secrets.CONSUL_GOSSIP_KEY }}/d" ./config.toml
+    - name: Build RAW
+      id: build-raw
+      uses: osbuild/bootc-image-builder-action@v0.0.2
+      with:
+        config-file: ./config.toml
+        image: docker.io/l3tum/nomad-consul-pi:latest
+        types: |
+          raw
+        rootfs: xfs
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: raw
+        path: ${{ steps.build-raw.outputs.output-directory }}
+        if-no-files-found: error
+    - name: Delete config.toml
+      if: always()
+      run: rm -rf ./config.toml

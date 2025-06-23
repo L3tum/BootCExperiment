@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
     - uses: actions/checkout@v4
-#    - name: Pull the config.toml
-#      run: curl https://raw.githubusercontent.com/L3tum/NomadConsulPi/refs/heads/master/config.toml --output ./config.toml
+    - name: Pull the config.toml
+      run: curl https://raw.githubusercontent.com/L3tum/NomadConsulPi/refs/heads/master/config.toml --output ./config.toml
     - name: Replace values in config.toml with secrets
       run: |
         sed -i -e "s%TAILSCALE_SECRET%${{ secrets.TS_AUTHOR_KEY }}%g" ./config.toml
@@ -22,7 +22,7 @@ jobs:
         image: docker.io/l3tum/nomad-consul-pi:latest
         types: |
           raw
-        rootfs: xfs
+        rootfs: ext4
     - name: Checkout artifact repo
       uses: actions/checkout@v4
       with:
